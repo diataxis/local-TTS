@@ -1,5 +1,5 @@
 import os
-os.environ["PATH"] = r"C:\Program Files\eSpeak NG;" + os.environ["PATH"]
+# os.environ["PATH"] = r"C:\Program Files\eSpeak NG;" + os.environ["PATH"]
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,7 +27,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # tts_models/en/jenny/jenny : no speaker
 # tts_models/multilingual/multi-dataset/xtts_v2
 # tts_model = TTS(model_name="tts_models/en/jenny/jenny", progress_bar=False).to(device)
-tts_model = TTS(model_name="tts_models/en/vctk/vits", progress_bar=False).to(device)
+# tts_model = TTS(model_name="tts_models/en/vctk/vits", progress_bar=False).to(device)
 tts_model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False).to(device)
 default_speaker_voice = "p294"
 default_narrator_voice = "p248"
