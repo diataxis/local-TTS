@@ -27,8 +27,8 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # tts_models/en/jenny/jenny : no speaker
 # tts_models/multilingual/multi-dataset/xtts_v2
 # tts_model = TTS(model_name="tts_models/en/jenny/jenny", progress_bar=False).to(device)
-# tts_model = TTS(model_name="tts_models/en/vctk/vits", progress_bar=False).to(device)
-tts_model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False).to(device)
+tts_model = TTS(model_name="tts_models/en/vctk/vits", progress_bar=False).to(device)
+# tts_model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False).to(device)
 default_speaker_voice = "p294"
 default_narrator_voice = "p248"
 
@@ -59,15 +59,15 @@ async def generate_tts(request: Request):
 
     tts_model.tts_to_file(
         text=text,
-        # speaker=speaker,
+        speaker=speaker,
         file_path=tmp_wav,
         
-        # length_scale=length_scale,
-        # noise_scale=noise_scale,
-        # noise_w=noise_w,
+        length_scale=length_scale,
+        noise_scale=noise_scale,
+        noise_w=noise_w,
         
-        language="en",
-        speaker_wav=["./voices/nicole.wav"]
+        # language="en",
+        # speaker_wav=["./voices/nicole.wav"]
     )
 
     audio = AudioSegment.from_wav(tmp_wav)
