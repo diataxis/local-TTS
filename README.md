@@ -1,5 +1,5 @@
 # local-TTS
-Python server with coqui-TTS for eudaimonia
+Python server with coqui-TTS for eu.daimonia.app
 
 ## Getting Started
 ### 1. Set Up Environment
