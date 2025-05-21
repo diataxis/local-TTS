@@ -12,7 +12,6 @@ conda activate local-tts
 ```
 
 ### 2. Install Requirements
-If you have a nvidia GPU:
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```

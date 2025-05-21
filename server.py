@@ -19,7 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 print("GPU", torch.cuda.is_available())
-print("GPU", torch.cuda.get_device_name(torch.cuda.current_device()))
+if (torch.cuda.is_available()):
+    print("GPU", torch.cuda.get_device_name(torch.cuda.current_device()))
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 # Load the model and set voices
