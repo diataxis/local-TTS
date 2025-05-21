@@ -12,6 +12,8 @@ conda activate local-tts
 ```
 
 ### 2. Install Requirements
+You may have to install espeak-ng, goto : https://github.com/espeak-ng/espeak-ng/blob/master/docs/guide.md and follow the installation instructions.
+Restart your computer.
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
