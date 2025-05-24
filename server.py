@@ -70,7 +70,7 @@ async def generate_tts(request: Request):
 
     tmp_wav = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.wav")
     print('path', tmp_wav)
-    tmp_mp3 = tmp_wav.replace(".wav", ".mp3")
+    # tmp_mp3 = tmp_wav.replace(".wav", ".mp3")
 
     # tts_model.tts_to_file(
     #     text=text,
@@ -97,7 +97,7 @@ async def generate_tts(request: Request):
         **preset['settings']
     )
     audio = AudioSegment.from_wav(tmp_wav)
-    audio.export(tmp_mp3, format="mp3")
-    os.remove(tmp_wav)
+    audio.export(tmp_wav, format="wav")
+    # os.remove(tmp_wav)
 
-    return FileResponse(tmp_mp3, media_type="audio/mpeg", filename="speech.mp3")
+    return FileResponse(tmp_wav, media_type="audio/mpeg", filename="speech.mp3")
