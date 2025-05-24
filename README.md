@@ -12,6 +12,9 @@ conda activate local-tts
 ```
 
 ### 2. Install Requirements
+Install ffmpeg if you don't have it:
+https://www.ffmpeg.org/download.html
+
 You may have to install espeak-ng, goto : https://github.com/espeak-ng/espeak-ng/blob/master/docs/guide.md and follow the installation instructions.
 Restart your computer.
 ```bash

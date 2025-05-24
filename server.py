@@ -45,6 +45,7 @@ async def generate_tts(request: Request):
     data = await request.json()
     text = data.get("text", "").strip()
     role = data.get("voice", "speaker")  # "speaker" or "narrator"
+    xtts_speaker = data.get("xtts_speaker")
     tts_voice = data.get("tts_voice")
     print("tts_voice", tts_voice)
     preset = presets[tts_voice]
@@ -83,6 +84,13 @@ async def generate_tts(request: Request):
     #     language="en",
     #     speaker_wav=["./voices/nicole.wav"]
     # )
+    if xtts_speaker is not None and tts_voice == "gpu1" and xtts_speaker != "nicole":
+        preset['settings']["speaker"] = xtts_speaker
+        preset['settings']["speaker_wav"] = None
+    elif tts_voice == "gpu1" and xtts_speaker == "nicole":
+        preset['settings']["speaker"] = None
+        preset['settings']["speaker_wav"] = ["./voices/nicole.wav"]
+        
     preset['settings']['text'] = text
     preset['settings']['file_path'] = tmp_wav
     tts_model.tts_to_file(
