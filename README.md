@@ -34,3 +34,11 @@ uvicorn server:app --host 0.0.0.0 --port 3200
 This starts a FastAPI server on `http://localhost:3200/tts`.
 
 ---
+### 3. Runpod Installation Guide
+- apt update
+- apt-get install espeak-ng
+- pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+- git clone https://github.com/diataxis/local-TTS.git
+- cd workspace
+- pip install -r requirements.txt
+- uvicorn server:app --host 0.0.0.0 --port 3200
