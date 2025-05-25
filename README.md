@@ -38,7 +38,6 @@ This starts a FastAPI server on `http://localhost:3200/tts`.
 ```bash
 apt update
 ```
-If you want to use cpu:
 ```bash
 apt-get install espeak-ng
 ```
@@ -49,7 +48,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 git clone https://github.com/diataxis/local-TTS.git
 ```
 ```bash
-cd workspace
+cd local-TTS/
 ```
 ```bash
 pip install -r requirements.txt
