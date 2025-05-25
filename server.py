@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 import uuid
 from TTS.api import TTS
-from pydub import AudioSegment
+# from pydub import AudioSegment
 app = FastAPI()
 import torch
 from presets import *
@@ -96,8 +96,8 @@ async def generate_tts(request: Request):
     tts_model.tts_to_file(
         **preset['settings']
     )
-    audio = AudioSegment.from_wav(tmp_wav)
-    audio.export(tmp_wav, format="wav")
+    # audio = AudioSegment.from_wav(tmp_wav)
+    # audio.export(tmp_wav, format="wav")
     # os.remove(tmp_wav)
 
     return FileResponse(tmp_wav, media_type="audio/mpeg", filename="speech.mp3")

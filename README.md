@@ -12,13 +12,15 @@ conda activate local-tts
 ```
 
 ### 2. Install Requirements
-Install ffmpeg if you don't have it:
-https://www.ffmpeg.org/download.html
-
 You may have to install espeak-ng, goto : https://github.com/espeak-ng/espeak-ng/blob/master/docs/guide.md and follow the installation instructions.
 Restart your computer.
+For Nvidia GPU (Cuda 11.8, replace with your version):
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+For CPU (Cuda 11.8, replace with your version):
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
 ```bash
 pip install -r requirements.txt
