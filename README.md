@@ -1,6 +1,6 @@
 # local-TTS
 Python server with coqui-TTS for eu.daimonia.app
-
+You can find a full guide with videos here: https://eu.daimonia.app/articles/local-TTS
 ## Getting Started
 ### 1. Set Up Environment
 
@@ -14,17 +14,20 @@ conda activate local-tts
 ### 2. Install Requirements
 You may have to install espeak-ng, goto : https://github.com/espeak-ng/espeak-ng/blob/master/docs/guide.md and follow the installation instructions.
 Restart your computer.
-For Nvidia GPU (Cuda 11.8, replace with your version):
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-```
-For CPU (Cuda 11.8, replace with your version):
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-```
+
 ```bash
 pip install -r requirements.txt
 ```
+If your GPU is not detected or have a torch error, installing the following dependencies can solve the issue.
+For Nvidia GPU (replace cu118 with you CUDA version if needed):
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+For CPU:
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+```
+
 ### 3. Start the Server
 
 ```bash

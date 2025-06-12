@@ -3,3 +3,5 @@ browser.js
 model list.yaml
 __pycache__/
 tests
+voices/my_voices/*
+!voices/my_voices/place_your_voices_here

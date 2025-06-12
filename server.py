@@ -1,7 +1,7 @@
 import os
 # os.environ["PATH"] = r"C:\Program Files\eSpeak NG;" + os.environ["PATH"]
-from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, UploadFile, File
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 import uuid
@@ -10,6 +10,7 @@ from TTS.api import TTS
 app = FastAPI()
 import torch
 from presets import *
+import shutil
 
 app.add_middleware(
     CORSMiddleware,
@@ -48,6 +49,7 @@ async def generate_tts(request: Request):
     xtts_speaker = data.get("xtts_speaker")
     tts_voice = data.get("tts_voice")
     print("tts_voice", tts_voice)
+    print("xtts_speaker", xtts_speaker)
     preset = presets[tts_voice]
     if tts_model == False or preset['model'] != current_model:
         tts_model = TTS(model_name=preset['model'], progress_bar=True).to(device)
@@ -57,47 +59,49 @@ async def generate_tts(request: Request):
         return {"error": "No text provided"}
 
     # Select voice and prosody based on role
-    if role == "narrator":
-        speaker = default_narrator_voice
-        length_scale = 1.2
-        noise_scale = 0.2
-        noise_w = 0.6
-    else:
-        speaker = default_speaker_voice
-        length_scale = 1.1
-        noise_scale = 0.33
-        noise_w = 0.8
+    # if role == "narrator":
+    #     speaker = default_narrator_voice
+    #     length_scale = 1.2
+    #     noise_scale = 0.2
+    #     noise_w = 0.6
+    # else:
+    #     speaker = default_speaker_voice
+    #     length_scale = 1.1
+    #     noise_scale = 0.33
+    #     noise_w = 0.8
 
     tmp_wav = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.wav")
     print('path', tmp_wav)
-    # tmp_mp3 = tmp_wav.replace(".wav", ".mp3")
 
-    # tts_model.tts_to_file(
-    #     text=text,
-    #     # speaker=speaker,
-    #     file_path=tmp_wav,
-        
-    #     # length_scale=length_scale,
-    #     # noise_scale=noise_scale,
-    #     # noise_w=noise_w,
-        
-    #     language="en",
-    #     speaker_wav=["./voices/nicole.wav"]
-    # )
-    if xtts_speaker is not None and tts_voice == "gpu1" and xtts_speaker != "nicole":
-        preset['settings']["speaker"] = xtts_speaker
-        preset['settings']["speaker_wav"] = None
-    elif tts_voice == "gpu1" and xtts_speaker == "nicole":
+    if tts_voice == "gpu1" and xtts_speaker == "nicole":
         preset['settings']["speaker"] = None
         preset['settings']["speaker_wav"] = ["./voices/nicole.wav"]
         
+    elif tts_voice == "cloning":
+        preset['settings']["speaker"] = None
+        preset['settings']["speaker_wav"] = ["./voices/my_voices/" + xtts_speaker]
+        
+    elif xtts_speaker is not None and xtts_speaker != "nicole":
+        preset['settings']["speaker"] = xtts_speaker
+        preset['settings']["speaker_wav"] = None
+    
+    
     preset['settings']['text'] = text
     preset['settings']['file_path'] = tmp_wav
+    preset['settings']['split_sentences'] = True
     tts_model.tts_to_file(
         **preset['settings']
     )
-    # audio = AudioSegment.from_wav(tmp_wav)
-    # audio.export(tmp_wav, format="wav")
-    # os.remove(tmp_wav)
 
     return FileResponse(tmp_wav, media_type="audio/mpeg", filename="speech.mp3")
+
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    print(file.filename)
+    file_location = f"{'./voices/my_voices/'}/{file.filename}"
+    
+    # Enregistrement du fichier
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    return JSONResponse(content={"filename": file.filename, "success": True})

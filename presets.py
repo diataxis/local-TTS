@@ -14,5 +14,12 @@ presets = {
             "speaker_wav":["./voices/nicole.wav"]
         },
         "model": "tts_models/multilingual/multi-dataset/xtts_v2"
+    },
+    "cloning": {
+        "settings": {
+            "language":"en",
+            "speaker_wav":["./voices/nicole.wav"]
+        },
+        "model": "tts_models/multilingual/multi-dataset/xtts_v2"
     }
 }
