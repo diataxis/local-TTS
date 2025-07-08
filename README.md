@@ -14,7 +14,7 @@ start server.bat
 ```
 You still have to install mini conda before running it.
 
-Make sure Make sure to change the following line in the file to the path where Conda is installed on your machine.
+Make sure to change the following line in the file to the path where Conda is installed on your machine.
 ```bash
 set "CONDA_PATH=[CONDA_PATH]"
 ```
@@ -25,6 +25,7 @@ conda info
 ---
 
 ### 3. Full installation process
+If you encounter issues with the batch files, or want to install it manually you can follow these steps.
 Open the miniconda terminal and create a virtual environment using `conda` or `venv`.
 
 ```bash
