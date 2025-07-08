@@ -5,3 +5,4 @@ __pycache__/
 tests
 voices/my_voices/*
 !voices/my_voices/place_your_voices_here
+start_server_perso.bat
