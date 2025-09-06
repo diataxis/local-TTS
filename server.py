@@ -19,6 +19,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def add_custom_header(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Private-Network"] = "true"
+    return response
+
 print("GPU", torch.cuda.is_available())
 if (torch.cuda.is_available()):
     print("GPU", torch.cuda.get_device_name(torch.cuda.current_device()))
