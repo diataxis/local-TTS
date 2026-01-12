@@ -6,3 +6,4 @@ tests
 voices/my_voices/*
 !voices/my_voices/upload_voices_here
 start_server_perso.bat
+models
