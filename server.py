@@ -95,7 +95,7 @@ async def generate_tts(request: Request):
         preset['settings']["speaker"] = None
         preset['settings']["speaker_wav"] = ["./voices/my_voices/" + xtts_speaker]
         
-    elif xtts_speaker is not None and xtts_speaker != "nicole" and 'speaker' in preset['settings']:
+    elif xtts_speaker is not None and xtts_speaker != "nicole":
         preset['settings']["speaker"] = xtts_speaker
         preset['settings']["speaker_wav"] = None
     
