@@ -40,13 +40,18 @@ Restart your computer.
 pip install -r requirements.txt
 ```
 If your GPU is not detected or have a torch error, installing the following dependencies can solve the issue.
-For Nvidia GPU (replace cu118 with you CUDA version if needed):
+
+For Nvidia GPU (replace "cu121" with your CUDA version if needed):
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 For CPU:
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+```
+For Nvidia RTX 5XXX series:
+```bash
+pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu128
 ```
 
 ### 3. Start the Server
@@ -59,6 +64,7 @@ This starts a FastAPI server on `http://localhost:3200/tts`.
 
 ---
 ## 3. Runpod Installation Guide
+If you're using an RTX 5090 on RunPod, please start with the "RunPod PyTorch 2.8.0" template. Otherwise, "RunPod PyTorch 2.2.0" is fine.
 ```bash
 apt update
 ```
