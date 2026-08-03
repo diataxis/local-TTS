@@ -1,0 +1,46 @@
+# Unified TTS server — Linux / RunPod / macOS install (Windows: use installation_unified.bat)
+#
+# IMPORTANT: install PyTorch FIRST, with the build matching your hardware, e.g.
+#   pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+#   (or .../whl/cpu, .../whl/cu126, .../whl/rocm6.2 on AMD Linux)
+# then:
+#   pip install -r requirements_unified.txt
+#
+# Then start with:
+#   uvicorn server_unified:app --host 0.0.0.0 --port 3200
+
+# --- API ---
+fastapi==0.110.1
+uvicorn==0.29.0
+python-multipart==0.0.9
+pydub==0.25.1
+
+# --- Coqui engine (VITS / xTTSv2) ---
+# Drop the [languages] extra if gruut/mecab fail to build (only needed for ja/zh)
+coqui-tts[languages]
+
+# --- Chatterbox engine ---
+diffusers==0.29.0
+conformer==0.3.2
+resemble-perth==1.0.1
+librosa==0.11.0
+pykakasi==2.3.0
+onnx==1.16.2
+pyloudnorm
+omegaconf
+# s3tokenizer and chatterbox-tts must be installed WITHOUT their dependencies,
+# otherwise they drag transformers 5.x back in and break coqui:
+#   pip install --no-deps s3tokenizer==0.2.0
+#   pip install --no-deps chatterbox-tts
+
+# --- Kokoro engine (optional, "fast" mode) ---
+# All deps unpinned: keeps the torch/transformers already installed.
+# misaki[en]'s espeakng-loader bundles the espeak-ng binary (no manual install).
+kokoro==0.9.4
+soundfile
+
+# --- The critical arbitration, install LAST ---
+# coqui-tts declares transformers>=4.57 but its code imports isin_mps_friendly,
+# removed in transformers 5.x. chatterbox-tts pins ==5.2.0 but runs fine on 4.57.1.
+# 4.57.1 is the only version that satisfies both. Install it last so nothing bumps it.
+#   pip install transformers==4.57.1

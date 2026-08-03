@@ -62,7 +62,7 @@ async def generate_tts(request: Request):
     print("tts_voice", tts_voice)
     print("xtts_speaker", xtts_speaker)
     preset = presets[tts_voice]
-
+    word_count = len(text.split())
     if tts_model == False or preset['model'] != current_model:
         tts_model = TTS(model_name=preset['model'], progress_bar=True).to(device)
         current_model = preset['model']
@@ -105,11 +105,19 @@ async def generate_tts(request: Request):
 
     preset['settings']['text'] = text
     preset['settings']['file_path'] = tmp_wav
+    
     preset['settings']['split_sentences'] = True
+    if word_count <= 3 and tts_voice in ("gpu1", "cloning"):
+        print("Short text detected, disabling sentence splitting, adding noise")
+        # text = f"Well, {text}"
+        preset['settings']['split_sentences'] = False
+    
     
     print('preset', preset)
     tts_model.tts_to_file(
-        **preset['settings']
+        **preset['settings'],
+        temperature=0.7,
+        top_p=0.85,
     )
 
     return FileResponse(tmp_wav, media_type="audio/mpeg", filename="speech.mp3")

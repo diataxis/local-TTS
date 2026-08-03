@@ -7,3 +7,7 @@ voices/my_voices/*
 !voices/my_voices/upload_voices_here
 start_server_perso.bat
 models
+install_unified_perso.bat
+start_server_perso1.bat
+voices/old/
+voices/presets/archived/
