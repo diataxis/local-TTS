@@ -26,11 +26,20 @@ voices/
     nicole.wav               # default reference voice
     presets/                 # Chatterbox reference WAVs (xTTS speaker names)
     my_voices/               # user uploads (/upload) — shared by all engines
+install.bat                  # Windows ONE-CLICK install (finds conda, detects GPU)
 installation_unified.bat     # Windows install (both stacks in one conda env)
 start_server_unified.bat     # Windows start script
 ```
 
-## Install (Windows)
+## Install (Windows) — one click
+
+Double-click **`install.bat`**. It finds Miniconda/Anaconda (or opens the
+Miniconda download page if missing — install it with the default options, then
+double-click `install.bat` again), creates the `local-tts-unified` env,
+detects an NVIDIA GPU to pick the PyTorch build (`cu124`, else `cpu`), and
+runs `installation_unified.bat`. Optional override: `install.bat cpu|cu124|cu126`.
+
+Manual equivalent:
 
 ```bash
 conda create -n local-tts-unified python=3.11 -y
