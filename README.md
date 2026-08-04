@@ -26,31 +26,24 @@ https://eu.daimonia.app/articles/local-TTS
 
 Install miniconda from https://www.anaconda.com/download/success
 
-### 2. Windows: the batch files
+### 2. Windows: one click
 
-Two `.bat` files at the root of the folder do everything for you:
+Double-click **`install.bat`**. It does everything:
 
-```bash
-installation_unified.bat        # installs everything (creates the conda env)
-start_server_unified.bat        # starts the server
-```
+- finds Miniconda/Anaconda (or opens the Miniconda download page if it's
+  missing — install it with the default options, then double-click
+  `install.bat` again),
+- creates the isolated `local-tts-unified` conda env (your existing Python
+  installs are never touched),
+- detects your NVIDIA GPU to pick the right PyTorch build,
+- installs all the engines (a few GB, 10–20 minutes).
 
-`installation_unified.bat` takes an optional argument to pick the PyTorch build:
+When it's done, start the server by double-clicking **`start_server_unified.bat`**
+(it finds conda by itself too — nothing to edit).
 
-```bash
-installation_unified.bat cu124      # NVIDIA GPU (default)
-installation_unified.bat cu126      # NVIDIA GPU, CUDA 12.6
-installation_unified.bat cpu        # no GPU
-```
-
-Make sure to change the following line in both files to the path where Conda is
-installed on your machine:
-
-```bash
-set "CONDA_PATH=[CONDA_PATH]"
-```
-
-You can find that path with `conda info` (line: "base environment").
+Advanced: `install.bat cpu|cu124|cu126` forces a PyTorch build. You normally
+never run `installation_unified.bat` yourself — `install.bat` calls it — but it
+can be run directly inside an already-activated conda env.
 
 > Thanks to Senorgif, who created the original batch files.
 
@@ -253,6 +246,8 @@ Everything is optional — the defaults are fine for most setups.
 | `TTS_DEVICE` | Force the device for every engine (`cuda`, `cpu`, `mps`) |
 | `TTS_EXCLUSIVE` | `false` lets several engines stay in memory at once (default `true`) |
 | `TTS_PRELOAD` | Models to load at startup, e.g. `chatterbox:turbo` (default: none, loaded on demand) |
+| `CHATTERBOX_DEVICE` | Chatterbox-only device override |
+| `KOKORO_DEVICE` | Kokoro-only device override |
 | `CHATTERBOX_MAX_MODELS` | How many Chatterbox sub-models stay resident (default 1) |
 | `CHATTERBOX_VOICE_CACHE` | Voice embedding cache size (default 16) |
 | `CHATTERBOX_DTYPE` | `float16` for half precision (experimental) |
@@ -260,7 +255,8 @@ Everything is optional — the defaults are fine for most setups.
 
 By default, generating with one engine unloads the other: both target ~4GB VRAM
 GPUs and generally can't coexist. Set `TTS_EXCLUSIVE=false` if you have VRAM to
-spare.
+spare. Kokoro is lightweight (<1GB VRAM) and exempt: a `fast` request never
+evicts xTTSv2/Chatterbox, and they never evict Kokoro.
 
 ---
 
