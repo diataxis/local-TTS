@@ -76,7 +76,7 @@ async def generate_tts(request: Request):
         "lang": data.get("lang") or "en",
         "data": data,
     }
-    print(f"{job['text']}"
+    print(f"[TEXT]:: {job['text']}\n\n"
         f"[tts] engine={engine.id} tts_voice={job['tts_voice']} "
           f"speaker={job['xtts_speaker']} lang={job['lang']}")
 

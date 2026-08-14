@@ -170,6 +170,29 @@ class ChatterboxEngine(BaseEngine):
         self._optimize_model(self.models[model_type], model_type)
         return self.models[model_type]
 
+    def _clear_alignment_hooks(self, model):
+        """Workaround for a chatterbox bug (resemble-ai/chatterbox#352, fix in
+        unmerged PR #505): each multilingual generate() builds a fresh
+        AlignmentStreamAnalyzer (t3.py resets self.compiled = False) which
+        registers 3 forward hooks on the transformer without ever removing the
+        previous ones. Each stale hook does a synchronous GPU->CPU copy per
+        decoded token, so it/s degrade linearly with every generation.
+        Purging them before each call keeps the count at 3 instead of 3N."""
+        try:
+            layers = model.t3.tfmr.layers
+        except AttributeError:
+            return
+        removed = 0
+        for layer in layers:
+            hooks = getattr(layer.self_attn, "_forward_hooks", None) or {}
+            for hid, fn in list(hooks.items()):
+                if "AlignmentStreamAnalyzer" in getattr(fn, "__qualname__", ""):
+                    del hooks[hid]
+                    getattr(layer.self_attn, "_forward_hooks_always_called", {}).pop(hid, None)
+                    removed += 1
+        if removed:
+            print(f"[chatterbox] removed {removed} stale alignment hooks")
+
     # ----- voice resolution -------------------------------------------------
 
     def _prepare_voice(self, model, model_type, audio_prompt_path):
@@ -262,6 +285,8 @@ class ChatterboxEngine(BaseEngine):
             generate_kwargs = {"text": text}
 
         model = self.get_model(model_type)
+        if model_type == "multilingual":
+            self._clear_alignment_hooks(model)
         voice_cached = self._prepare_voice(model, model_type, audio_prompt_path)
         if audio_prompt_path and not voice_cached:
             generate_kwargs["audio_prompt_path"] = audio_prompt_path
